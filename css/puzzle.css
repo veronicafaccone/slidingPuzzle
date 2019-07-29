@@ -117,9 +117,9 @@ button {
   background-color: rgba(0, 0, 0, 0.3);
   top: 0;
   left: 0;
-  display: none;
   opacity: 0;
-  transition: all .2s .4s ease-in-out; }
+  transition: all .2s .4s ease-in-out;
+  display: none; }
   .vue-overlay.x-active {
     display: block;
     opacity: 1; }
@@ -132,8 +132,10 @@ button {
   top: 100%;
   left: 50%;
   transform: translateX(-50%) translateY(0);
-  transition: all .2s .4s ease-in-out; }
+  transition: all .2s .4s ease-in-out;
+  display: none; }
   .vue-alert-container.x-active {
+    display: block;
     top: 50%;
     transform: translateX(-50%) translateY(-50%); }
   .vue-alert-container .vue-alert-content {
