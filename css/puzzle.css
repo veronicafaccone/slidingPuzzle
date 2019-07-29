@@ -2,17 +2,19 @@
 .vue-container-title {
   margin-bottom: 20px;
   margin: 20px auto;
-  width: 300px;
   text-align: center; }
   .vue-container-title .title {
     color: black;
     font-family: Montserrat, Arial, sans-serif;
-    font-size: 30px;
+    font-size: 40px;
     font-weight: 600;
     letter-spacing: 5px;
     transition: all .5s ease-in-out;
     text-transform: capitalize;
     margin: unset; }
+    @media screen and (max-width: 736px) {
+      .vue-container-title .title {
+        font-size: 30px; } }
 
 .vue-puzzle__container {
   height: 301px;
@@ -20,6 +22,22 @@
   outline: solid 1px black;
   position: relative;
   margin: auto; }
+  .vue-puzzle__container.goal {
+    height: 151px;
+    width: 151px; }
+    .vue-puzzle__container.goal .vue-puzzle__bg-image {
+      background-size: auto 151px; }
+      .vue-puzzle__container.goal .vue-puzzle__bg-image.top100 {
+        top: 50px; }
+      .vue-puzzle__container.goal .vue-puzzle__bg-image.top200 {
+        top: 100px; }
+      .vue-puzzle__container.goal .vue-puzzle__bg-image.left100 {
+        left: 50px; }
+      .vue-puzzle__container.goal .vue-puzzle__bg-image.left200 {
+        left: 100px; }
+    .vue-puzzle__container.goal .vue-puzzle__tiles {
+      height: 50px;
+      width: 50px; }
   .vue-puzzle__container.vue-puzzle__container--image-uno .vue-puzzle__bg-image {
     background-image: url("../img/me_background.jpg"); }
   .vue-puzzle__container.vue-puzzle__container--image-due .vue-puzzle__bg-image {
@@ -32,6 +50,31 @@
     background-image: url("../img/storm_background.jpg"); }
   .vue-puzzle__container.vue-puzzle__container--image-sei .vue-puzzle__bg-image {
     background-image: url("../img/redmoon_background.jpg"); }
+
+.vue-container-puzzles {
+  display: flex;
+  max-width: 1024px;
+  margin: auto; }
+  @media screen and (max-width: 736px) {
+    .vue-container-puzzles {
+      display: block; } }
+  .vue-container-puzzles__goal {
+    width: 300px;
+    height: 350px;
+    margin: auto; }
+    .vue-container-puzzles__goal .title-goal {
+      text-align: center;
+      color: black;
+      font-family: Montserrat, Arial, sans-serif;
+      font-size: 25px;
+      font-weight: 600;
+      letter-spacing: 5px;
+      transition: all .5s ease-in-out;
+      text-transform: capitalize;
+      margin: 10px auto; }
+      @media screen and (max-width: 736px) {
+        .vue-container-puzzles__goal .title-goal {
+          margin: 20px auto 10px; } }
 
 .vue-puzzle__tiles {
   width: 100px;
