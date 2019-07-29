@@ -35,7 +35,7 @@ Vue.component('container',{
 			container: 'vue-puzzle__container',
 			image: [],
 			tilesClass: 'vue-puzzle__tiles vue-puzzle__bg-image',
-			classImage: ['vue-puzzle__container--image-uno', 'vue-puzzle__container--image-due', 'vue-puzzle__container--image-tre', 'vue-puzzle__container--image-quattro', 'vue-puzzle__container--image-cinque', 'vue-puzzle__container--image-cinque'],
+			classImage: ['vue-puzzle__container--image-uno', 'vue-puzzle__container--image-due', 'vue-puzzle__container--image-tre', 'vue-puzzle__container--image-quattro', 'vue-puzzle__container--image-cinque', 'vue-puzzle__container--image-sei'],
 			idNumber: ['tileNumber1','tileNumber2','tileNumber3','tileNumber4','tileNumber5','tileNumber6','tileNumber7','tileNumber8','tileNumber9'],
 			tilePosition: ['top0 left0', 'top0 left100', 'top0 left200', 'top100 left0', 'top100 left100', 'top100 left200', 'top200 left0', 'top200 left100', 'top200 left200'],
 			reorderPosition: ['top0 left0', 'top0 left100', 'top0 left200', 'top100 left0', 'top100 left100', 'top100 left200', 'top200 left0', 'top200 left100', 'top200 left200'],
@@ -68,7 +68,7 @@ Vue.component('container',{
 	},
 	methods: {
 		shuffle: function() {
-			this.tilePosition = _.shuffle(this.reorderPosition);
+			this.tilePosition = _.shuffle(this.tilePosition);
 		},
 		randomImage: function(){
 			this.tilePosition = _.shuffle(this.tilePosition);
