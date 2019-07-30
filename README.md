@@ -1,7 +1,7 @@
 # slidingPuzzle
 Sliding puzzle (9-puzzle) implementation in Vue JS and CSS.
 ## How to Play
-* The goal of the game is to show how to arrange the tiles in order (as shown in the `Goal`)
+* The goal of the game is to arrange the tiles in order (as shown in the `Goal`)
 * Swipe on the tile you want to move; it will shift to the empty spot
 * Clicking on `shuffle` button tiles will move to another random position
 * Clicking on `random image` button image to solve will change
