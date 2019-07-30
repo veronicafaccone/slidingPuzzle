@@ -62,15 +62,9 @@ Vue.component('container',{
 			var $this = this;
 			this.getCoordinateTiles();
 			$('.vue-puzzle__tilestomove').each(function(){
-				var tileToMove = $(this)[0];
+				window.tileToMove = $(this)[0];
 				$this.moveTile(tileToMove);
 			});
-		});
-	},
-	updated: function(){
-		this.$nextTick(function (){
-			this.getCoordinateTiles();
-			this.checkCorrectPosition();
 		});
 	},
 	methods: {
@@ -99,61 +93,10 @@ Vue.component('container',{
 		solve: function () {
 			this.tilePosition = this.reorderPosition;
 		},
-		moveTile: function(el){
-			var tileToMove = new Hammer.Manager(el),
-				swipe = new Hammer.Swipe(),
-				$this = this;
-
-			tileToMove.add(swipe);
-
-			function updateTiles(el, movingTile, emptyTile){
-				if($(el).hasClass(movingTile) && empty.hasClass(emptyTile)){
-					$(el).removeClass(movingTile).addClass(emptyTile);
-					empty.removeClass(emptyTile).addClass(movingTile);
-
-					$this.checkCorrectPosition();
-					$this.alertEndGame();
-					$this.getCoordinateTiles();
-				}
-			}
-
-			tileToMove.on('swiperight', function(){
-				var leftCoordinateMovingTile = leftCoordinate - 100,
-					classLeftMovingTile = 'left' + leftCoordinateMovingTile,
-					classesMovingTile = classTop + ' ' + classLeftMovingTile,
-					classesEmptyTile = classTop + ' ' + classLeft;
-
-				updateTiles(el, classesMovingTile, classesEmptyTile);
-			});
-			tileToMove.on('swipeleft', function(){
-				var leftCoordinateMovingTile = leftCoordinate + 100,
-					classLeftMovingTile = 'left' + leftCoordinateMovingTile,
-					classesMovingTile = classTop + ' ' + classLeftMovingTile,
-					classesEmptyTile = classTop + ' ' + classLeft;
-
-				updateTiles(el, classesMovingTile, classesEmptyTile);
-			});
-			tileToMove.on('swipedown', function(){
-				var topCoordinateMovingTile = topCoordinate - 100,
-					classTopMovingTile = 'top' + topCoordinateMovingTile,
-					classesMovingTile = classTopMovingTile + ' ' + classLeft,
-					classesEmptyTile = classTop + ' ' + classLeft;
-
-				updateTiles(el, classesMovingTile, classesEmptyTile);
-			});
-			tileToMove.on('swipeup', function(){
-				var topCoordinateMovingTile = topCoordinate + 100,
-					classTopMovingTile = 'top' + topCoordinateMovingTile,
-					classesMovingTile = classTopMovingTile + ' ' + classLeft,
-					classesEmptyTile = classTop + ' ' + classLeft;
-
-				updateTiles(el, classesMovingTile, classesEmptyTile);
-			});
-		},
 		getCoordinateTiles: function () {
 			window.empty = $('#tileNumber9');
 			var	emptyClasses = empty.attr('class').split(' ');
-			
+
 			var	emptyTopClass = $.grep(emptyClasses, function(item, index) {
 				return item.indexOf('top') === 0;
 			});
@@ -167,6 +110,52 @@ Vue.component('container',{
 			var leftNumber = emptyLeftClass.toString().slice(4);
 			window.leftCoordinate = parseInt(leftNumber, 10);
 			window.classLeft = 'left' + leftCoordinate;
+		},
+		updateTiles: function(el, movingTile, emptyTile){
+			if($(el).hasClass(movingTile) && empty.hasClass(emptyTile)){
+				$(el).removeClass(movingTile).addClass(emptyTile);
+				empty.removeClass(emptyTile).addClass(movingTile);
+
+				this.checkCorrectPosition();
+				this.alertEndGame();
+				this.getCoordinateTiles();
+			}
+		},
+		swipeVerticale: function(tile, n){
+			var topCoordinateMovingTile = topCoordinate + n,
+				classTopMovingTile = 'top' + topCoordinateMovingTile,
+				classesMovingTile = classTopMovingTile + ' ' + classLeft,
+				classesEmptyTile = classTop + ' ' + classLeft;
+
+			this.updateTiles(tile, classesMovingTile, classesEmptyTile);
+		},
+		swipeLaterale: function(tile, n){
+			var leftCoordinateMovingTile = leftCoordinate + n,
+				classLeftMovingTile = 'left' + leftCoordinateMovingTile,
+				classesMovingTile = classTop + ' ' + classLeftMovingTile,
+				classesEmptyTile = classTop + ' ' + classLeft;
+
+			this.updateTiles(tile, classesMovingTile, classesEmptyTile);
+		},
+		moveTile: function(el){
+			var tileToMove = new Hammer.Manager(el),
+				swipe = new Hammer.Swipe(),
+				$this = this;
+
+			tileToMove.add(swipe);
+
+			tileToMove.on('swiperight', function(){
+				$this.swipeLaterale(el, -100);
+			});
+			tileToMove.on('swipeleft', function(){
+				$this.swipeLaterale(el, 100);
+			});
+			tileToMove.on('swipedown', function(){
+				$this.swipeVerticale(el, -100);
+			});
+			tileToMove.on('swipeup', function(){
+				$this.swipeVerticale(el, 100);
+			});
 		},
 		arraysEqual: function(arr1, arr2) {
 			var is_same = arr1.every(function(element, index) {
