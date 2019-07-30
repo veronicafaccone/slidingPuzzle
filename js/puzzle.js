@@ -30,7 +30,7 @@ Vue.component('container',{
 				"</div>" +
 			"</div>" +
 			"<div class='vue-overlay'></div>" +
-				"<div class='vue-alert-container'>" +
+				"<div class='vue-alert-container display-none'>" +
 					"<div class='vue-alert-content'>" +
 						"<p class='vue-alert-message'>You Win!</p>" +
 						"<button @click='newGame'>Start a new puzzle</button>" +
@@ -60,25 +60,22 @@ Vue.component('container',{
 	mounted(){
 		this.$nextTick(function (){
 			var $this = this;
+			this.getCoordinateTiles();
 			$('.vue-puzzle__tilestomove').each(function(){
 				var tileToMove = $(this)[0];
 				$this.moveTile(tileToMove);
 			});
-			this.getLeftCoordinate();
-			this.getTopCoordinate();
 		});
 	},
 	updated: function(){
 		this.$nextTick(function (){
-			this.getLeftCoordinate();
-			this.getTopCoordinate();
+			this.getCoordinateTiles();
 			this.checkCorrectPosition();
 		});
 	},
 	methods: {
 		shuffle: function() {
 			this.tilePosition = _.shuffle(this.reorderPosition);
-			console.log(this.tilePosition);
 		},
 		randomImage: function(){
 			this.shuffle();
@@ -90,8 +87,14 @@ Vue.component('container',{
 		},
 		newGame: function(){
 			this.randomImage();
+
 			$('.vue-overlay').removeClass('x-active');
 			$('.vue-alert-container').removeClass('x-active');
+
+			setTimeout(function(){
+				$('.vue-alert-container').addClass('display-none');
+				$('.vue-overlay').addClass('display-none');
+			}, 700);
 		},
 		solve: function () {
 			this.tilePosition = this.reorderPosition;
@@ -103,96 +106,67 @@ Vue.component('container',{
 
 			tileToMove.add(swipe);
 
-			tileToMove.on('swiperight', function(){
-				var leftCoordinateMovingTile = leftCoordinate - 100,
-					classLeftMovingTile = 'left' + leftCoordinateMovingTile,
-					classLeftEmptyTile = 'left' + leftCoordinate,
-					classTop = 'top' + topCoordinate,
-					classesMovingTile = classTop + ' ' + classLeftMovingTile,
-					classesEmptyTile = classTop + ' ' + classLeftEmptyTile;
-
-				if($(el).hasClass(classesMovingTile) && empty.hasClass(classesEmptyTile)){
-					$(el).removeClass(classesMovingTile).addClass(classesEmptyTile);
-					empty.removeClass(classesEmptyTile).addClass(classesMovingTile);
+			function updateTiles(el, movingTile, emptyTile){
+				if($(el).hasClass(movingTile) && empty.hasClass(emptyTile)){
+					$(el).removeClass(movingTile).addClass(emptyTile);
+					empty.removeClass(emptyTile).addClass(movingTile);
 
 					$this.checkCorrectPosition();
 					$this.alertEndGame();
-					$this.getLeftCoordinate();
-					$this.getTopCoordinate();
+					$this.getCoordinateTiles();
 				}
+			}
+
+			tileToMove.on('swiperight', function(){
+				var leftCoordinateMovingTile = leftCoordinate - 100,
+					classLeftMovingTile = 'left' + leftCoordinateMovingTile,
+					classesMovingTile = classTop + ' ' + classLeftMovingTile,
+					classesEmptyTile = classTop + ' ' + classLeft;
+
+				updateTiles(el, classesMovingTile, classesEmptyTile);
 			});
 			tileToMove.on('swipeleft', function(){
 				var leftCoordinateMovingTile = leftCoordinate + 100,
 					classLeftMovingTile = 'left' + leftCoordinateMovingTile,
-					classLeftEmptyTile = 'left' + leftCoordinate,
-					classTop = 'top' + topCoordinate,
 					classesMovingTile = classTop + ' ' + classLeftMovingTile,
-					classesEmptyTile = classTop + ' ' + classLeftEmptyTile;
+					classesEmptyTile = classTop + ' ' + classLeft;
 
-				if($(el).hasClass(classesMovingTile) && empty.hasClass(classesEmptyTile)){
-					$(el).removeClass(classesMovingTile).addClass(classesEmptyTile);
-					empty.removeClass(classesEmptyTile).addClass(classesMovingTile);
-
-					$this.checkCorrectPosition();
-					$this.alertEndGame();
-					$this.getLeftCoordinate();
-					$this.getTopCoordinate();
-				}
+				updateTiles(el, classesMovingTile, classesEmptyTile);
 			});
 			tileToMove.on('swipedown', function(){
 				var topCoordinateMovingTile = topCoordinate - 100,
 					classTopMovingTile = 'top' + topCoordinateMovingTile,
-					classTopEmptyTile = 'top' + topCoordinate,
-					classLeft = 'left' + leftCoordinate,
 					classesMovingTile = classTopMovingTile + ' ' + classLeft,
-					classesEmptyTile = classTopEmptyTile + ' ' + classLeft;
+					classesEmptyTile = classTop + ' ' + classLeft;
 
-				if($(el).hasClass(classesMovingTile) && empty.hasClass(classesEmptyTile)){
-					$(el).removeClass(classesMovingTile).addClass(classesEmptyTile);
-					empty.removeClass(classesEmptyTile).addClass(classesMovingTile);
-
-					$this.checkCorrectPosition();
-					$this.alertEndGame();
-					$this.getLeftCoordinate();
-					$this.getTopCoordinate();
-				}
+				updateTiles(el, classesMovingTile, classesEmptyTile);
 			});
 			tileToMove.on('swipeup', function(){
 				var topCoordinateMovingTile = topCoordinate + 100,
 					classTopMovingTile = 'top' + topCoordinateMovingTile,
-					classTopEmptyTile = 'top' + topCoordinate,
-					classLeft = 'left' + leftCoordinate,
 					classesMovingTile = classTopMovingTile + ' ' + classLeft,
-					classesEmptyTile = classTopEmptyTile + ' ' + classLeft;
+					classesEmptyTile = classTop + ' ' + classLeft;
 
-				if($(el).hasClass(classesMovingTile) && empty.hasClass(classesEmptyTile)){
-					$(el).removeClass(classesMovingTile).addClass(classesEmptyTile);
-					empty.removeClass(classesEmptyTile).addClass(classesMovingTile);
-
-					$this.checkCorrectPosition();
-					$this.alertEndGame();
-					$this.getLeftCoordinate();
-					$this.getTopCoordinate();
-				}
+				updateTiles(el, classesMovingTile, classesEmptyTile);
 			});
 		},
-		getLeftCoordinate: function(){
-			window.empty = $('#tileNumber9');
-			var emptyClasses = empty.attr('class').split(' ');
-			var	emptyLeftClass = $.grep(emptyClasses, function(item, index) {
-				return item.indexOf('left') === 0;
-			});
-			var leftNumber = emptyLeftClass.toString().slice(4);
-			window.leftCoordinate = parseInt(leftNumber, 10);
-		},
-		getTopCoordinate: function () {
+		getCoordinateTiles: function () {
 			window.empty = $('#tileNumber9');
 			var	emptyClasses = empty.attr('class').split(' ');
+			
 			var	emptyTopClass = $.grep(emptyClasses, function(item, index) {
 				return item.indexOf('top') === 0;
 			});
 			var topNumber = emptyTopClass.toString().slice(3);
 			window.topCoordinate = parseInt(topNumber, 10);
+			window.classTop = 'top' + topCoordinate;
+
+			var	emptyLeftClass = $.grep(emptyClasses, function(item, index) {
+				return item.indexOf('left') === 0;
+			});
+			var leftNumber = emptyLeftClass.toString().slice(4);
+			window.leftCoordinate = parseInt(leftNumber, 10);
+			window.classLeft = 'left' + leftCoordinate;
 		},
 		arraysEqual: function(arr1, arr2) {
 			var is_same = arr1.every(function(element, index) {
@@ -208,8 +182,13 @@ Vue.component('container',{
 		alertEndGame: function(){
 			var hasClassEmpty = $('#tileNumber9').hasClass('empty');
 			if(hasClassEmpty === false){
-				$('.vue-overlay').addClass('x-active');
-				$('.vue-alert-container').addClass('x-active');
+				$('.vue-alert-container').removeClass('display-none');
+				$('.vue-overlay').removeClass('display-none');
+
+				setTimeout(function(){
+					$('.vue-overlay').addClass('x-active');
+					$('.vue-alert-container').addClass('x-active');
+				}, 700);
 			}
 		},
 		checkCorrectPosition: function () {
