@@ -67,6 +67,12 @@ Vue.component('container',{
 			});
 		});
 	},
+	updated(){
+		this.$nextTick(function (){
+			this.getCoordinateTiles();
+			this.checkCorrectPosition();
+		});
+	},
 	methods: {
 		shuffle: function() {
 			this.tilePosition = _.shuffle(this.reorderPosition);
@@ -116,9 +122,9 @@ Vue.component('container',{
 				$(el).removeClass(movingTile).addClass(emptyTile);
 				empty.removeClass(emptyTile).addClass(movingTile);
 
+				this.getCoordinateTiles();
 				this.checkCorrectPosition();
 				this.alertEndGame();
-				this.getCoordinateTiles();
 			}
 		},
 		swipeVerticale: function(tile, n){
