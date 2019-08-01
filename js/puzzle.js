@@ -62,7 +62,7 @@ Vue.component('container',{
 			var $this = this;
 			this.getCoordinateTiles();
 			$('.vue-puzzle__tilestomove').each(function(){
-				window.tileToMove = $(this)[0];
+				var tileToMove = $(this)[0];
 				$this.moveTile(tileToMove);
 			});
 		});
@@ -71,6 +71,8 @@ Vue.component('container',{
 		this.$nextTick(function (){
 			this.getCoordinateTiles();
 			this.checkCorrectPosition();
+
+			return this.tilePosition;
 		});
 	},
 	methods: {
@@ -119,8 +121,13 @@ Vue.component('container',{
 		},
 		updateTiles: function(el, movingTile, emptyTile){
 			if($(el).hasClass(movingTile) && empty.hasClass(emptyTile)){
-				$(el).removeClass(movingTile).addClass(emptyTile);
-				empty.removeClass(emptyTile).addClass(movingTile);
+				var movingTileIndex = this.tilePosition.indexOf(movingTile);
+				var emptyTileIndex = this.tilePosition.indexOf(emptyTile);
+
+				Vue.set(this.tilePosition, movingTileIndex, emptyTile);
+				Vue.set(this.tilePosition, emptyTileIndex, movingTile);
+
+				vm.$forceUpdate();
 
 				this.getCoordinateTiles();
 				this.checkCorrectPosition();
