@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	var puzzle = new Vue({
+	var vm = new Vue({
 		el: '#puzzle'
 	});
 
@@ -71,8 +71,6 @@ Vue.component('container',{
 		this.$nextTick(function (){
 			this.getCoordinateTiles();
 			this.checkCorrectPosition();
-
-			return this.tilePosition;
 		});
 	},
 	methods: {
