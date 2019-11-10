@@ -29,8 +29,8 @@ Vue.component('container',{
 					"</div>" +
 				"</div>" +
 			"</div>" +
-			"<div class='vue-overlay'></div>" +
-				"<div class='vue-alert-container display-none'>" +
+			"<div class='vue-overlay' :class='alertEndGame'></div>" +
+				"<div class='vue-alert-container' :class='alertEndGame'>" +
 					"<div class='vue-alert-content'>" +
 						"<p class='vue-alert-message'>You Win!</p>" +
 						"<button @click='newGame'>Start a new puzzle</button>" +
@@ -44,12 +44,60 @@ Vue.component('container',{
 			goal: 'goal',
 			image: [],
 			tilesClass: 'vue-puzzle__tiles vue-puzzle__bg-image',
-			classImage: ['vue-puzzle__container--image-uno', 'vue-puzzle__container--image-due', 'vue-puzzle__container--image-tre', 'vue-puzzle__container--image-quattro', 'vue-puzzle__container--image-cinque', 'vue-puzzle__container--image-sei'],
-			idNumber: ['tileNumber1','tileNumber2','tileNumber3','tileNumber4','tileNumber5','tileNumber6','tileNumber7','tileNumber8','tileNumber9'],
+			classImage: [
+				'vue-puzzle__container--image-uno',
+				'vue-puzzle__container--image-due',
+				'vue-puzzle__container--image-tre',
+				'vue-puzzle__container--image-quattro',
+				'vue-puzzle__container--image-cinque',
+				'vue-puzzle__container--image-sei'
+			],
+			idNumber: [
+				'tileNumber1',
+				'tileNumber2',
+				'tileNumber3',
+				'tileNumber4',
+				'tileNumber5',
+				'tileNumber6',
+				'tileNumber7',
+				'tileNumber8',
+				'tileNumber9'
+			],
 			tilePosition: [],
-			reorderPosition: ['top0 left0', 'top0 left100', 'top0 left200', 'top100 left0', 'top100 left100', 'top100 left200', 'top200 left0', 'top200 left100', 'top200 left200'],
-			backgroundPosition: ['background-position1', 'background-position2', 'background-position3', 'background-position4', 'background-position5', 'background-position6', 'background-position7', 'background-position8', 'background-position9'],
-			movingClass: ['vue-puzzle__tilestomove', 'vue-puzzle__tilestomove', 'vue-puzzle__tilestomove', 'vue-puzzle__tilestomove', 'vue-puzzle__tilestomove', 'vue-puzzle__tilestomove', 'vue-puzzle__tilestomove', 'vue-puzzle__tilestomove', 'empty']
+			reorderPosition: [
+				'top0 left0',
+				'top0 left100',
+				'top0 left200',
+				'top100 left0',
+				'top100 left100',
+				'top100 left200',
+				'top200 left0',
+				'top200 left100',
+				'top200 left200'
+			],
+			backgroundPosition: [
+				'background-position1',
+				'background-position2',
+				'background-position3',
+				'background-position4',
+				'background-position5',
+				'background-position6',
+				'background-position7',
+				'background-position8',
+				'background-position9'
+			],
+			movingClass: [
+				'vue-puzzle__tilestomove',
+				'vue-puzzle__tilestomove',
+				'vue-puzzle__tilestomove',
+				'vue-puzzle__tilestomove',
+				'vue-puzzle__tilestomove',
+				'vue-puzzle__tilestomove',
+				'vue-puzzle__tilestomove',
+				'vue-puzzle__tilestomove',
+				'empty'
+			],
+			alertWinner: false
 		}
 	},
 	created(){
@@ -73,6 +121,17 @@ Vue.component('container',{
 			this.checkCorrectPosition();
 		});
 	},
+	computed: {
+		alertEndGame: function(){
+				classes = [];
+			if(this.alertWinner){
+				classes.push('x-active');
+			} else {
+				classes = [];
+			}
+			return classes;
+		}
+	},
 	methods: {
 		shuffle: function() {
 			this.tilePosition = _.shuffle(this.reorderPosition);
@@ -87,14 +146,7 @@ Vue.component('container',{
 		},
 		newGame: function(){
 			this.randomImage();
-
-			$('.vue-overlay').removeClass('x-active');
-			$('.vue-alert-container').removeClass('x-active');
-
-			setTimeout(function(){
-				$('.vue-alert-container').addClass('display-none');
-				$('.vue-overlay').addClass('display-none');
-			}, 700);
+			this.alertWinner = false;
 		},
 		solve: function () {
 			this.tilePosition = this.reorderPosition;
@@ -129,7 +181,6 @@ Vue.component('container',{
 
 				this.getCoordinateTiles();
 				this.checkCorrectPosition();
-				this.alertEndGame();
 			}
 		},
 		swipeVerticale: function(tile, n){
@@ -175,20 +226,10 @@ Vue.component('container',{
 
 			if(is_same === false){
 				$('#tileNumber9').addClass('empty');
+				this.alertWinner = false;
 			} else{
 				$('#tileNumber9').removeClass('empty');
-			}
-		},
-		alertEndGame: function(){
-			var hasClassEmpty = $('#tileNumber9').hasClass('empty');
-			if(hasClassEmpty === false){
-				$('.vue-alert-container').removeClass('display-none');
-				$('.vue-overlay').removeClass('display-none');
-
-				setTimeout(function(){
-					$('.vue-overlay').addClass('x-active');
-					$('.vue-alert-container').addClass('x-active');
-				}, 700);
+				this.alertWinner = true;
 			}
 		},
 		checkCorrectPosition: function () {
