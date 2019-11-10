@@ -229,10 +229,6 @@ button{
 		opacity: 1;
 		transition: all .2s .5s ease-in-out;
 	}
-	&.display-none{
-		display: none;
-		transition: all .2s .7s ease-in-out;
-	}
 }
 
 .vue-alert-container{
@@ -244,15 +240,13 @@ button{
 	top: 100%;
 	left: 50%;
 	transform: translateX(-50%)translateY(0);
+	display: none;
 	transition: all .2s .5s ease-in-out;
 	&.x-active{
+		display: block;
 		top: 50%;
 		transform: translateX(-50%)translateY(-50%);
 		transition: all .2s .5s ease-in-out;
-	}
-	&.display-none{
-		display: none;
-		transition: all .2s .7s ease-in-out;
 	}
 	.vue-alert-content{
 		position: relative;
