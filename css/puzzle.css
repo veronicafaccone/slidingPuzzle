@@ -167,9 +167,6 @@ button {
     display: block;
     opacity: 1;
     transition: all .2s .5s ease-in-out; }
-  .vue-overlay.display-none {
-    display: none;
-    transition: all .2s .7s ease-in-out; }
 
 .vue-alert-container {
   height: 200px;
@@ -180,14 +177,13 @@ button {
   top: 100%;
   left: 50%;
   transform: translateX(-50%) translateY(0);
+  display: none;
   transition: all .2s .5s ease-in-out; }
   .vue-alert-container.x-active {
+    display: block;
     top: 50%;
     transform: translateX(-50%) translateY(-50%);
     transition: all .2s .5s ease-in-out; }
-  .vue-alert-container.display-none {
-    display: none;
-    transition: all .2s .7s ease-in-out; }
   .vue-alert-container .vue-alert-content {
     position: relative;
     top: 50%;
